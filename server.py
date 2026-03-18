@@ -35,27 +35,43 @@ SCHEDULED_HOUR = 11  # Verificação automática todo dia às 11h
 NEWS_FILE            = "news_cache.json"
 
 # ── Configuração de notícias ──────────────────────────────────────
-NEWS_QUERY       = "precatórios"   # Termo de busca
+NEWS_QUERY       = "precatórios"   # Termo de busca no Google News
 NEWS_TIMELINE    = 30              # Notícias buscadas e salvas no cache
 
 
 def fetch_news() -> list:
     import urllib.parse
     query = urllib.parse.quote(NEWS_QUERY)
-    api_key = os.environ.get("NEWSAPI_KEY", "")
-    url = f"https://newsapi.org/v2/everything?q={query}&language=pt&sortBy=publishedAt&pageSize={NEWS_TIMELINE}&apiKey={api_key}"
+    url = f"https://news.google.com/rss/search?q={query}&hl=pt-BR&gl=BR&ceid=BR:pt-419"
+    headers = {
+        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+    }
     try:
-        req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+        req = urllib.request.Request(url, headers=headers)
         with urllib.request.urlopen(req, timeout=15) as resp:
-            data = json.loads(resp.read().decode("utf-8"))
+            tree = ET.parse(resp)
+        root = tree.getroot()
+        channel = root.find("channel")
+        items = channel.findall("item") if channel is not None else []
         results = []
-        for article in data.get("articles", []):
+        for item in items[:NEWS_TIMELINE]:
+            title     = (item.findtext("title") or "").strip()
+            link      = (item.findtext("link") or "").strip()
+            pub       = (item.findtext("pubDate") or "").strip()
+            source_el = item.find("source")
+            source    = source_el.text.strip() if source_el is not None else "Google News"
+            pub_iso   = ""
+            try:
+                from email.utils import parsedate_to_datetime
+                pub_iso = parsedate_to_datetime(pub).isoformat()
+            except Exception:
+                pub_iso = pub
             results.append({
-                "title":         article.get("title", "").strip(),
-                "link":          article.get("url", "").strip(),
-                "source":        article.get("source", {}).get("name", "NewsAPI"),
-                "published":     article.get("publishedAt", ""),
-                "published_iso": article.get("publishedAt", ""),
+                "title": title,
+                "link": link,
+                "source": source,
+                "published": pub,
+                "published_iso": pub_iso,
             })
         return results
     except Exception as e:
@@ -74,6 +90,7 @@ def load_news() -> list:
     if p.exists():
         return json.loads(p.read_text(encoding="utf-8"))
     return []
+
 
 # ─────────────────────────────────────────────
 #  LIVE RELOAD via Server-Sent Events
@@ -213,6 +230,8 @@ def _do_check(triggered_by: str = "manual") -> dict:
         if news:
             save_news(news)
             print(f"[news] {len(news)} notícias salvas em {NEWS_FILE}")
+        else:
+            print(f"[news] Nenhuma notícia encontrada ou erro na busca.")
         scheduler_state["last_run"] = datetime.now().isoformat()
         if triggered_by == "automatico":
             scheduler_state["next_run"] = _next_scheduled_run().isoformat()
