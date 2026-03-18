@@ -19,6 +19,9 @@ from datetime import datetime, timedelta
 from pathlib import Path
 import urllib.request
 import xml.etree.ElementTree as ET
+import os
+port = int(os.environ.get("PORT", 5000))
+app.run(host="0.0.0.0", port=port, debug=False, threaded=True)
 
 from flask import Flask, jsonify, send_file, request, Response, stream_with_context
 from flask_cors import CORS
