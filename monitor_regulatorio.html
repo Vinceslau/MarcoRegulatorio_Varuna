@@ -2155,12 +2155,12 @@ let dynamicState = {};
 
 async function loadDynamicState() {
   try {
-    const r = await fetch('http://localhost:5000/api/state');
+    fetch('/api/state')
     if (r.ok) dynamicState = await r.json();
   } catch(e) {}
 }
 
-const API_BASE = 'http://localhost:5000/api';
+const API_BASE = '/api';
 
 let state = {
   filter: 'todos',
