@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: marcoregulatorio-varuna
+    runtime: python
+    buildCommand: pip install -r requirements.txt && playwright install chromium
+    startCommand: python server.py
+    envVars:
+      - key: PLAYWRIGHT_BROWSERS_PATH
+        value: "0"
+```
+
+---
+
+### 2. Verificar o Start Command no painel do Render
+
+1. Vá no painel do seu serviço
+2. Clique em **"Settings"**
+3. Procure **"Start Command"** e confirme que está assim:
+```
+python server.py
