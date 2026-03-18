@@ -12,6 +12,7 @@ Acesse o dashboard em: http://localhost:5000
 """
 
 import json
+import os
 import queue
 import threading
 import time
@@ -34,45 +35,27 @@ SCHEDULED_HOUR = 11  # Verificação automática todo dia às 11h
 NEWS_FILE            = "news_cache.json"
 
 # ── Configuração de notícias ──────────────────────────────────────
-NEWS_QUERY       = "precatórios"   # Termo de busca no Google News
+NEWS_QUERY       = "precatórios"   # Termo de busca
 NEWS_TIMELINE    = 30              # Notícias buscadas e salvas no cache
 
 
 def fetch_news() -> list:
-    """
-    Busca notícias no Google News RSS sobre precatórios.
-    Altere NEWS_QUERY para mudar o termo de busca.
-    Altere NEWS_TIMELINE para controlar quantas são salvas.
-    """
     import urllib.parse
     query = urllib.parse.quote(NEWS_QUERY)
-    url = f"https://news.google.com/rss/search?q={query}&hl=pt-BR&gl=BR&ceid=BR:pt-419"
+    api_key = os.environ.get("NEWSAPI_KEY", "")
+    url = f"https://newsapi.org/v2/everything?q={query}&language=pt&sortBy=publishedAt&pageSize={NEWS_TIMELINE}&apiKey={api_key}"
     try:
         req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
         with urllib.request.urlopen(req, timeout=15) as resp:
-            tree = ET.parse(resp)
-        root = tree.getroot()
-        channel = root.find("channel")
-        items = channel.findall("item") if channel else []
+            data = json.loads(resp.read().decode("utf-8"))
         results = []
-        for item in items[:NEWS_TIMELINE]:
-            title     = (item.findtext("title") or "").strip()
-            link      = (item.findtext("link") or "").strip()
-            pub       = (item.findtext("pubDate") or "").strip()
-            source_el = item.find("source")
-            source    = source_el.text.strip() if source_el is not None else "Google News"
-            pub_iso   = ""
-            try:
-                from email.utils import parsedate_to_datetime
-                pub_iso = parsedate_to_datetime(pub).isoformat()
-            except Exception:
-                pub_iso = pub
+        for article in data.get("articles", []):
             results.append({
-                "title": title,
-                "link": link,
-                "source": source,
-                "published": pub,
-                "published_iso": pub_iso,
+                "title":         article.get("title", "").strip(),
+                "link":          article.get("url", "").strip(),
+                "source":        article.get("source", {}).get("name", "NewsAPI"),
+                "published":     article.get("publishedAt", ""),
+                "published_iso": article.get("publishedAt", ""),
             })
         return results
     except Exception as e:
@@ -176,7 +159,7 @@ def save_notification(entry: dict):
 
 
 # ─────────────────────────────────────────────
-#  AGENDADOR SEMANAL
+#  AGENDADOR DIARIO
 # ─────────────────────────────────────────────
 
 scheduler_state = {
@@ -249,7 +232,6 @@ def _do_check(triggered_by: str = "manual") -> dict:
     except Exception as e:
         scheduler_state["running"] = False
         print(f"[scheduler] Erro: {e}")
-        # Salva notificação de erro para que o usuário veja no dashboard
         entry = {
             "id":           f"notif_{int(time.time())}",
             "timestamp":    datetime.now().isoformat(),
@@ -341,10 +323,12 @@ def api_mark_all_read():
     )
     return jsonify({"ok": True})
 
+
 @app.route("/api/news")
 def api_news():
     limit = int(request.args.get("limit", NEWS_TIMELINE))
     return jsonify(load_news()[:limit])
+
 
 @app.route("/api/state")
 def api_state():
@@ -366,6 +350,5 @@ if __name__ == "__main__":
     threading.Thread(target=scheduled_check, daemon=True).start()
     threading.Thread(target=_watch_html, daemon=True).start()
 
-    import os
     port = int(os.environ.get("PORT", 5000))
-    app.run(host="0.0.0.0", port=5000, debug=False, threaded=True)
+    app.run(host="0.0.0.0", port=port, debug=False, threaded=True)
