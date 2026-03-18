@@ -1,0 +1,4 @@
+libnss3
+libnspr4
+libgbm1
+libasound2
