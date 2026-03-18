@@ -1,0 +1,3099 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PJUS — Monitor de Marco Regulatório</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Lato:wght@300;400;700&family=Source+Code+Pro:wght@400;500&display=swap');
+
+:root {
+  /* PJUS Brand Colors */
+  --navy:        #0d1f3c;
+  --navy-mid:    #162d54;
+  --navy-light:  #1e3d6e;
+  --royal:       #1a5fb4;
+  --royal-light: #2671c8;
+  --sky:         #4a90d9;
+  --sky-light:   #e8f1fb;
+  --sky-pale:    #f0f6ff;
+
+  /* Neutrals */
+  --white:       #ffffff;
+  --off-white:   #f8fafd;
+  --gray-50:     #f1f5f9;
+  --gray-100:    #e2e8f0;
+  --gray-200:    #cbd5e1;
+  --gray-400:    #94a3b8;
+  --gray-600:    #475569;
+  --gray-800:    #1e293b;
+
+  /* Semantic */
+  --green:       #166534;
+  --green-bg:    #f0fdf4;
+  --green-border:#bbf7d0;
+  --amber:       #92400e;
+  --amber-bg:    #fffbeb;
+  --amber-border:#fde68a;
+  --red:         #991b1b;
+  --red-bg:      #fef2f2;
+  --red-border:  #fecaca;
+  --purple:      #5b21b6;
+  --purple-bg:   #f5f3ff;
+  --purple-border:#ddd6fe;
+
+  /* Typography */
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body:    'Lato', sans-serif;
+  --font-mono:    'Source Code Pro', monospace;
+
+  /* Shadows */
+  --shadow-sm:  0 1px 3px rgba(13,31,60,0.08), 0 1px 2px rgba(13,31,60,0.05);
+  --shadow-md:  0 4px 12px rgba(13,31,60,0.10), 0 2px 4px rgba(13,31,60,0.06);
+  --shadow-lg:  0 10px 30px rgba(13,31,60,0.12), 0 4px 8px rgba(13,31,60,0.08);
+  --shadow-xl:  0 20px 60px rgba(13,31,60,0.18);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--off-white);
+  color: var(--gray-800);
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.5;
+  min-height: 100vh;
+}
+
+/* ── HEADER ─────────────────────────────────────────────── */
+header {
+  background: var(--navy);
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  box-shadow: 0 4px 24px rgba(13,31,60,0.35);
+}
+
+.header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+  height: 68px;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+
+.logo-area {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.logo-mark {
+  width: 38px;
+  height: 38px;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.logo-divider {
+  width: 1px;
+  height: 32px;
+  background: rgba(255,255,255,0.2);
+}
+
+.logo-text-area {}
+
+.logo-brand {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--white);
+  letter-spacing: 0.04em;
+  line-height: 1;
+}
+
+.logo-subtitle {
+  font-size: 10px;
+  font-weight: 300;
+  color: rgba(255,255,255,0.5);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin-top: 3px;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.hdr-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 14px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border: 1px solid;
+}
+
+.hdr-pill.connected {
+  background: rgba(34,197,94,0.1);
+  border-color: rgba(34,197,94,0.25);
+  color: #86efac;
+}
+
+.hdr-pill.offline {
+  background: rgba(251,191,36,0.1);
+  border-color: rgba(251,191,36,0.25);
+  color: #fde68a;
+}
+
+.hdr-pill-dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: currentColor;
+  animation: blink 2s infinite;
+}
+
+@keyframes blink {
+  0%,100% { opacity:1; } 50% { opacity:0.3; }
+}
+
+.hdr-btn {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 16px;
+  border-radius: 20px;
+  border: 1px solid;
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.hdr-btn-ghost {
+  background: transparent;
+  border-color: rgba(255,255,255,0.18);
+  color: rgba(255,255,255,0.75);
+}
+.hdr-btn-ghost:hover {
+  background: rgba(255,255,255,0.07);
+  color: var(--white);
+  border-color: rgba(255,255,255,0.3);
+}
+
+.hdr-btn-primary {
+  background: var(--royal);
+  border-color: var(--royal-light);
+  color: var(--white);
+}
+.hdr-btn-primary:hover {
+  background: var(--royal-light);
+  box-shadow: 0 0 20px rgba(26,95,180,0.4);
+}
+
+.hdr-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+.notif-btn-wrap {
+  position: relative;
+}
+
+.notif-unread-dot {
+  display: none;
+  position: absolute;
+  top: 4px; right: 4px;
+  width: 7px; height: 7px;
+  background: #f87171;
+  border-radius: 50%;
+  border: 2px solid var(--navy);
+}
+
+/* Breadcrumb bar */
+.header-breadcrumb {
+  padding: 8px 40px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  color: rgba(255,255,255,0.35);
+  letter-spacing: 0.06em;
+}
+
+.breadcrumb-sep { opacity: 0.3; }
+
+.breadcrumb-active {
+  color: rgba(255,255,255,0.65);
+  font-weight: 700;
+}
+
+/* ── MAIN LAYOUT ─────────────────────────────────────────── */
+main {
+  max-width: 1480px;
+  margin: 0 auto;
+  padding: 36px 40px 80px;
+}
+
+/* ── PAGE TITLE ──────────────────────────────────────────── */
+.page-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 28px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--gray-100);
+}
+
+.page-title {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--navy);
+  line-height: 1.1;
+}
+
+.page-title span {
+  display: block;
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--gray-400);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.page-meta {
+  text-align: right;
+  font-size: 11px;
+  color: var(--gray-400);
+  font-family: var(--font-mono);
+}
+
+.page-meta strong {
+  display: block;
+  font-size: 13px;
+  color: var(--gray-600);
+  font-weight: 500;
+  margin-bottom: 2px;
+}
+
+/* ── KPI CARDS ───────────────────────────────────────────── */
+.kpi-row {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.kpi-card {
+  background: var(--white);
+  border: 1px solid var(--gray-100);
+  border-radius: 16px;
+  padding: 20px 22px;
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  overflow: hidden;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.kpi-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+.kpi-card::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 3px;
+  height: 100%;
+}
+
+.kpi-card.blue::after   { background: var(--royal); }
+.kpi-card.green::after  { background: #16a34a; }
+.kpi-card.amber::after  { background: #d97706; }
+.kpi-card.purple::after { background: #7c3aed; }
+.kpi-card.slate::after  { background: var(--gray-400); }
+
+.kpi-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gray-400);
+  margin-bottom: 10px;
+}
+
+.kpi-value {
+  font-family: var(--font-display);
+  font-size: 38px;
+  font-weight: 600;
+  line-height: 1;
+  margin-bottom: 5px;
+}
+
+.kpi-card.blue .kpi-value   { color: var(--royal); }
+.kpi-card.green .kpi-value  { color: #15803d; }
+.kpi-card.amber .kpi-value  { color: #b45309; }
+.kpi-card.purple .kpi-value { color: #6d28d9; }
+.kpi-card.slate .kpi-value  { color: var(--gray-600); font-size: 20px; padding-top: 8px; }
+
+.kpi-desc {
+  font-size: 11px;
+  color: var(--gray-400);
+}
+
+/* ── TWO-COLUMN LAYOUT ───────────────────────────────────── */
+.content-grid {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 24px;
+  align-items: start;
+}
+
+/* ── SECTION CARDS ───────────────────────────────────────── */
+.section-card {
+  background: var(--white);
+  border: 1px solid var(--gray-100);
+  border-radius: 16px;
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+
+.section-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 22px;
+  border-bottom: 1px solid var(--gray-100);
+  background: var(--white);
+}
+
+.section-card-title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--navy);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.section-card-title::before {
+  content: '';
+  width: 3px; height: 14px;
+  background: var(--royal);
+  border-radius: 2px;
+}
+
+/* ── TOOLBAR ─────────────────────────────────────────────── */
+.toolbar {
+  padding: 12px 22px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 1px solid var(--gray-100);
+  background: var(--gray-50);
+  flex-wrap: wrap;
+  border-radius: 0;
+}
+
+.search-wrap {
+  position: relative;
+  flex: 1;
+  min-width: 200px;
+}
+
+.search-icon-inner {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 13px;
+  color: var(--gray-400);
+  pointer-events: none;
+}
+
+.search-field {
+  width: 100%;
+  padding: 7px 10px 7px 32px;
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: 20px;
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: var(--gray-800);
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.search-field:focus {
+  border-color: var(--royal);
+  box-shadow: 0 0 0 3px rgba(26,95,180,0.1);
+}
+
+.search-field::placeholder { color: var(--gray-400); }
+
+.filter-group {
+  display: flex;
+  gap: 4px;
+}
+
+.filter-chip {
+  padding: 5px 11px;
+  border-radius: 20px;
+  border: 1px solid var(--gray-200);
+  background: var(--white);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--gray-600);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-chip:hover {
+  border-color: var(--royal);
+  color: var(--royal);
+}
+
+.filter-chip.active {
+  background: var(--royal);
+  border-color: var(--royal);
+  color: var(--white);
+}
+
+/* ── TABLE ───────────────────────────────────────────────── */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.data-table thead tr {
+  background: var(--gray-50);
+  border-bottom: 2px solid var(--gray-100);
+}
+
+.data-table th {
+  padding: 10px 16px;
+  text-align: left;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gray-400);
+}
+
+.data-table tbody tr {
+  border-bottom: 1px solid var(--gray-100);
+  cursor: pointer;
+  transition: background 0.12s;
+}
+
+.data-table tbody tr:last-child { border-bottom: none; }
+
+.data-table tbody tr:hover { background: var(--sky-pale); }
+
+.data-table td {
+  padding: 13px 16px;
+  vertical-align: top;
+  font-size: 13px;
+}
+
+.case-id {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--royal);
+  margin-bottom: 3px;
+}
+
+.case-summary {
+  font-size: 11px;
+  color: var(--gray-400);
+  line-height: 1.4;
+}
+
+/* Tribunal badges */
+.trib-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 8px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border: 1px solid;
+  white-space: nowrap;
+}
+
+.trib-stf    { background: #eff6ff; color: #1d4ed8; border-color: #bfdbfe; }
+.trib-stj    { background: #f0fdfa; color: #0f766e; border-color: #99f6e4; }
+.trib-camara { background: #fffbeb; color: #b45309; border-color: #fde68a; }
+.trib-tce    { background: #f5f3ff; color: #6d28d9; border-color: #ddd6fe; }
+.trib-judicial { background: #f0fdf4; color: #15803d; border-color: #bbf7d0; }
+.trib-outros { background: var(--gray-50); color: var(--gray-600); border-color: var(--gray-200); }
+
+/* Status badges */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 8px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border: 1px solid;
+  white-space: nowrap;
+}
+
+.status-ativo      { background: var(--green-bg); color: var(--green); border-color: var(--green-border); }
+.status-encerrado  { background: var(--gray-50); color: var(--gray-600); border-color: var(--gray-200); }
+.status-suspenso   { background: var(--amber-bg); color: var(--amber); border-color: var(--amber-border); }
+
+.status-dot-sm {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.mov-date {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--gray-400);
+  margin-bottom: 3px;
+}
+
+.mov-text {
+  font-size: 12px;
+  color: var(--gray-600);
+  line-height: 1.5;
+  max-width: 340px;
+}
+
+.expand-icon {
+  color: var(--gray-400);
+  font-size: 11px;
+  transition: transform 0.2s;
+  text-align: center;
+}
+
+/* Detail row */
+.detail-row { display: none; }
+.detail-row.open { display: table-row; }
+
+.detail-cell {
+  padding: 16px 22px 16px 48px;
+  background: var(--sky-pale);
+  border-bottom: 1px solid var(--gray-100);
+}
+
+.detail-inner {
+  display: flex;
+  gap: 40px;
+  align-items: flex-start;
+}
+
+.detail-timeline { flex: 1; }
+
+.detail-timeline-title {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gray-400);
+  margin-bottom: 12px;
+}
+
+.detail-event {
+  display: flex;
+  gap: 14px;
+  padding-bottom: 10px;
+  position: relative;
+}
+
+.detail-event::before {
+  content: '';
+  position: absolute;
+  left: 34px;
+  top: 16px;
+  bottom: 0;
+  width: 1px;
+  background: var(--gray-200);
+}
+
+.detail-event:last-child::before { display: none; }
+
+.detail-event-date {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--gray-400);
+  min-width: 72px;
+  padding-top: 1px;
+}
+
+.detail-event-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  border: 2px solid var(--royal);
+  background: var(--white);
+  flex-shrink: 0;
+  margin-top: 3px;
+  z-index: 1;
+}
+
+.detail-event-text {
+  font-size: 12px;
+  color: var(--gray-600);
+  line-height: 1.5;
+  padding-bottom: 4px;
+}
+
+.detail-source {
+  flex-shrink: 0;
+}
+
+.source-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 12px;
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--royal);
+  text-decoration: none;
+  transition: all 0.15s;
+}
+
+.source-btn:hover {
+  background: var(--sky-light);
+  border-color: var(--royal);
+}
+
+/* ── SIDEBAR ─────────────────────────────────────────────── */
+.sidebar { display: flex; flex-direction: column; gap: 20px; }
+
+.side-card {
+  background: var(--white);
+  border: 1px solid var(--gray-100);
+  border-radius: 16px;
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+
+.side-card-header {
+  padding: 13px 18px;
+  border-bottom: 1px solid var(--gray-100);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--navy);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.side-card-body { padding: 16px 18px; }
+
+/* Countdown */
+.countdown-value {
+  font-family: var(--font-display);
+  font-size: 32px;
+  font-weight: 600;
+  color: var(--navy);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.countdown-label {
+  font-size: 11px;
+  color: var(--gray-400);
+  margin-bottom: 14px;
+}
+
+.progress-track {
+  height: 6px;
+  background: var(--gray-100);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--royal), var(--sky));
+  border-radius: 6px;
+  transition: width 1s ease;
+}
+
+/* Activity log */
+.log-list { display: flex; flex-direction: column; gap: 0; }
+
+.log-entry {
+  display: flex;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--gray-100);
+  font-size: 11px;
+  align-items: flex-start;
+}
+
+.log-entry:last-child { border-bottom: none; }
+
+.log-time {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--gray-400);
+  flex-shrink: 0;
+  padding-top: 1px;
+  min-width: 40px;
+}
+
+.log-msg { color: var(--gray-600); line-height: 1.4; }
+.log-ok   { color: #15803d; }
+.log-warn { color: #b45309; }
+.log-info { color: var(--royal); }
+
+/* ── TIMELINE PANEL ──────────────────────────────────────── */
+.timeline-list {
+  padding: 16px 0;
+  max-height: 480px;
+  overflow-y: auto;
+}
+
+.timeline-list::-webkit-scrollbar { width: 4px; }
+.timeline-list::-webkit-scrollbar-track { background: transparent; }
+.timeline-list::-webkit-scrollbar-thumb { background: var(--gray-200); border-radius: 2px; }
+
+.tl-item {
+  display: flex;
+  gap: 14px;
+  padding: 0 22px 16px;
+  position: relative;
+}
+
+.tl-item::after {
+  content: '';
+  position: absolute;
+  left: 31px; top: 12px; bottom: 0;
+  width: 1px;
+  background: var(--gray-100);
+}
+
+.tl-item:last-child::after { display: none; }
+
+.tl-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  border: 2px solid;
+  flex-shrink: 0;
+  margin-top: 2px;
+  background: var(--white);
+  z-index: 1;
+}
+
+.tl-dot.stf      { border-color: #1d4ed8; background: #eff6ff; }
+.tl-dot.stj      { border-color: #0f766e; background: #f0fdfa; }
+.tl-dot.camara   { border-color: #b45309; background: #fffbeb; }
+.tl-dot.tce      { border-color: #6d28d9; background: #f5f3ff; }
+.tl-dot.judicial { border-color: #15803d; background: #f0fdf4; }
+.tl-dot.outros   { border-color: var(--gray-400); background: var(--gray-50); }
+
+.tl-content {}
+
+.tl-date {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--gray-400);
+  margin-bottom: 2px;
+}
+
+.tl-case {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--royal);
+  font-weight: 500;
+  margin-bottom: 2px;
+}
+
+.tl-desc {
+  font-size: 12px;
+  color: var(--gray-600);
+  line-height: 1.5;
+}
+
+/* ── NOTIFICATIONS PANEL ─────────────────────────────────── */
+.notif-drawer {
+  position: fixed;
+  top: 68px; right: 0; bottom: 0;
+  width: 400px;
+  background: var(--white);
+  border-left: 1px solid var(--gray-200);
+  border-radius: 20px 0 0 20px;
+  z-index: 300;
+  display: flex;
+  flex-direction: column;
+  transform: translateX(100%);
+  transition: transform 0.28s cubic-bezier(0.4,0,0.2,1);
+  box-shadow: -8px 0 32px rgba(13,31,60,0.12);
+}
+
+.notif-drawer.open { transform: translateX(0); }
+
+.notif-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 299;
+  background: rgba(13,31,60,0.25);
+  display: none;
+  backdrop-filter: blur(2px);
+}
+
+.notif-overlay.open { display: block; }
+
+.notif-drawer-header {
+  padding: 18px 22px;
+  border-bottom: 1px solid var(--gray-100);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--navy);
+}
+
+.notif-drawer-title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--white);
+}
+
+.notif-drawer-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.notif-drawer-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px;
+}
+
+.notif-drawer-body::-webkit-scrollbar { width: 4px; }
+.notif-drawer-body::-webkit-scrollbar-thumb { background: var(--gray-200); border-radius: 2px; }
+
+.notif-card {
+  border: 1px solid var(--gray-100);
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  background: var(--white);
+}
+
+.notif-card:hover { border-color: var(--royal); box-shadow: var(--shadow-sm); }
+.notif-card.unread { border-left: 3px solid var(--royal); }
+
+.notif-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  gap: 8px;
+}
+
+.notif-card-time {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--gray-400);
+}
+
+.notif-trigger-badge {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  padding: 2px 7px;
+  border-radius: 20px;
+  text-transform: uppercase;
+}
+
+.notif-trigger-badge.auto   { background: var(--sky-light); color: var(--royal); }
+.notif-trigger-badge.manual { background: var(--green-bg); color: var(--green); }
+
+.notif-card-summary {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--gray-800);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.notif-change-item {
+  background: var(--gray-50);
+  border-radius: 2px;
+  padding: 8px 10px;
+  margin-top: 6px;
+  border-left: 2px solid var(--royal);
+}
+
+.notif-change-case {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--royal);
+  margin-bottom: 3px;
+}
+
+.notif-change-desc { font-size: 12px; color: var(--gray-600); line-height: 1.4; }
+.notif-change-date { font-size: 10px; color: var(--gray-400); margin-top: 3px; font-family: var(--font-mono); }
+
+.notif-empty {
+  text-align: center;
+  padding: 48px 24px;
+  color: var(--gray-400);
+  font-size: 13px;
+  line-height: 1.6;
+
+}
+
+/* ── MODAL ───────────────────────────────────────────────── */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(13,31,60,0.5);
+  backdrop-filter: blur(4px);
+  z-index: 400;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s;
+}
+
+.modal-backdrop.visible {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.modal-box {
+  background: var(--white);
+  border-radius: 20px;
+  padding: 0;
+  max-width: 580px;
+  width: 92%;
+  max-height: 82vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-xl);
+  transform: translateY(16px) scale(0.98);
+  transition: transform 0.25s;
+  position: relative;
+}
+
+.modal-backdrop.visible .modal-box {
+  transform: translateY(0) scale(1);
+}
+
+.modal-header-bar {
+  background: var(--navy);
+  padding: 20px 28px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  border-radius: 20px 20px 0 0;
+}
+
+.modal-icon-wrap {
+  width: 40px; height: 40px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  background: rgba(255,255,255,0.1);
+  flex-shrink: 0;
+}
+
+.modal-header-text { flex: 1; }
+
+.modal-title {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--white);
+  line-height: 1.2;
+}
+
+.modal-subtitle {
+  font-size: 11px;
+  color: rgba(255,255,255,0.5);
+  margin-top: 3px;
+}
+
+.modal-close-btn {
+  width: 28px; height: 28px;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 8px;
+  color: rgba(255,255,255,0.6);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  transition: all 0.15s;
+  flex-shrink: 0;
+}
+
+.modal-close-btn:hover {
+  background: rgba(255,255,255,0.2);
+  color: var(--white);
+}
+
+.modal-body { padding: 24px 28px; }
+
+.modal-footer-bar {
+  padding: 16px 28px;
+  border-top: 1px solid var(--gray-100);
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  background: var(--gray-50);
+}
+
+.modal-change-card {
+  border: 1px solid var(--gray-100);
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  border-left: 3px solid var(--royal);
+}
+
+.modal-change-case {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--royal);
+  font-weight: 500;
+  margin-bottom: 5px;
+}
+
+.modal-change-text { font-size: 13px; color: var(--gray-800); line-height: 1.5; }
+.modal-change-meta { font-size: 11px; color: var(--gray-400); margin-top: 5px; font-family: var(--font-mono); }
+
+/* ── BUTTONS (general) ───────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 16px;
+  border-radius: 20px;
+  border: 1px solid;
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.btn-primary {
+  background: var(--royal);
+  border-color: var(--royal);
+  color: var(--white);
+}
+.btn-primary:hover { background: var(--royal-light); border-color: var(--royal-light); }
+
+.btn-outline {
+  background: transparent;
+  border-color: var(--gray-200);
+  color: var(--gray-600);
+}
+.btn-outline:hover { border-color: var(--royal); color: var(--royal); background: var(--sky-pale); }
+
+.btn-sm { padding: 5px 11px; font-size: 11px; }
+
+.spinner {
+  width: 12px; height: 12px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: var(--white);
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+  display: none;
+}
+
+.btn.loading .spinner { display: block; }
+.btn.loading .btn-label { opacity: 0.7; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── TOAST ───────────────────────────────────────────────── */
+.toast-stack {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  z-index: 500;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  pointer-events: none;
+}
+
+.toast-item {
+  background: var(--navy);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 14px;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--white);
+  box-shadow: var(--shadow-lg);
+  pointer-events: all;
+  transform: translateX(120%);
+  transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+  max-width: 360px;
+}
+
+.toast-item.show { transform: translateX(0); }
+.toast-item.hide { transform: translateX(120%); transition: transform 0.25s ease-in; }
+
+/* ── REPORT TABLE ────────────────────────────────────────── */
+.report-grid {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.report-kpi {
+  border: 1px solid var(--gray-100);
+  border-radius: 3px;
+  padding: 14px 16px;
+  text-align: center;
+}
+
+.report-kpi-value {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.report-kpi-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gray-400);
+}
+
+
+/* ── Modal shorthand aliases (used in dynamic modal HTML strings) */
+.modal-header {
+  background: var(--navy);
+  padding: 20px 28px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  border-radius: 16px 16px 0 0;
+}
+
+.modal-icon {
+  width: 40px; height: 40px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  background: rgba(255,255,255,0.1);
+  flex-shrink: 0;
+}
+
+.modal-title {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--white);
+  line-height: 1.2;
+}
+
+.modal-subtitle {
+  font-size: 11px;
+  color: rgba(255,255,255,0.5);
+  margin-top: 3px;
+}
+
+.modal-footer {
+  padding: 16px 28px;
+  border-top: 1px solid var(--gray-100);
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  background: var(--gray-50);
+  border-radius: 0 0 16px 16px;
+}
+
+.modal-body-pad {
+  padding: 20px 28px;
+}
+
+.change-item {
+  border: 1px solid var(--gray-100);
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin-bottom: 10px;
+  border-left: 3px solid var(--royal);
+}
+
+.change-case {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--royal);
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.change-text {
+  font-size: 13px;
+  color: var(--gray-800);
+  line-height: 1.5;
+}
+
+.change-date {
+  font-size: 11px;
+  color: var(--gray-400);
+  margin-top: 4px;
+  font-family: var(--font-mono);
+}
+
+/* surface2 used in some inline styles */
+:root {
+  --surface2: var(--gray-50);
+  --red:      var(--red-bg, #fef2f2);
+  --green:    #15803d;
+}
+
+/* ── MISSING: table cell classes (used in JS renderTable) ─── */
+.case-name {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--royal);
+  margin-bottom: 3px;
+}
+
+.case-desc {
+  font-size: 11px;
+  color: var(--gray-400);
+  line-height: 1.4;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 8px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border: 1px solid;
+  white-space: nowrap;
+}
+
+/* alias — JS uses both .badge and .trib-badge */
+.trib-stf, .badge.trib-stf    { background: #eff6ff; color: #1d4ed8; border-color: #bfdbfe; }
+.trib-stj, .badge.trib-stj    { background: #f0fdfa; color: #0f766e; border-color: #99f6e4; }
+.trib-camara, .badge.trib-camara { background: #fffbeb; color: #b45309; border-color: #fde68a; }
+.trib-tce, .badge.trib-tce    { background: #f5f3ff; color: #6d28d9; border-color: #ddd6fe; }
+.trib-judicial, .badge.trib-judicial { background: #f0fdf4; color: #15803d; border-color: #bbf7d0; }
+.trib-outros, .badge.trib-outros { background: var(--gray-50); color: var(--gray-600); border-color: var(--gray-200); }
+
+.update-date {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--gray-400);
+  margin-bottom: 3px;
+}
+
+.update-text {
+  font-size: 12px;
+  color: var(--gray-600);
+  line-height: 1.5;
+  max-width: 360px;
+}
+
+.source-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 12px;
+  padding: 6px 12px;
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--royal);
+  text-decoration: none;
+  transition: all 0.15s;
+}
+
+.source-link:hover {
+  background: var(--sky-light);
+  border-color: var(--royal);
+}
+
+/* ── MISSING: log item (used in renderLog) ───────────────── */
+.log-item {
+  display: flex;
+  gap: 10px;
+  padding: 7px 0;
+  border-bottom: 1px solid var(--gray-100);
+  font-size: 11px;
+  align-items: flex-start;
+}
+
+.log-item:last-child { border-bottom: none; }
+
+/* ── MISSING: filter-btn (setFilter uses .filter-btn) ───── */
+.filter-btn {
+  padding: 5px 11px;
+  border-radius: 20px;
+  border: 1px solid var(--gray-200);
+  background: var(--white);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--gray-600);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover { border-color: var(--royal); color: var(--royal); }
+.filter-btn.active { background: var(--royal); border-color: var(--royal); color: var(--white); }
+
+/* ── MISSING: btn-ghost (used in modal HTML strings) ─────── */
+.btn-ghost {
+  background: transparent;
+  border-color: var(--gray-200);
+  color: var(--gray-600);
+}
+.btn-ghost:hover { border-color: var(--royal); color: var(--royal); background: var(--sky-pale); }
+
+/* ── MISSING: timeline classes (used in renderTimeline) ──── */
+.timeline-item {
+  display: flex;
+  gap: 14px;
+  padding: 0 22px 16px;
+  position: relative;
+}
+
+.timeline-item::after {
+  content: '';
+  position: absolute;
+  left: 31px; top: 12px; bottom: 0;
+  width: 1px;
+  background: var(--gray-100);
+}
+
+.timeline-item:last-child::after { display: none; }
+
+.timeline-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  border: 2px solid;
+  flex-shrink: 0;
+  margin-top: 2px;
+  background: var(--white);
+  z-index: 1;
+}
+
+.timeline-dot.blue   { border-color: #1d4ed8; background: #eff6ff; }
+.timeline-dot.green  { border-color: #15803d; background: #f0fdf4; }
+.timeline-dot.yellow { border-color: #b45309; background: #fffbeb; }
+.timeline-dot.purple { border-color: #6d28d9; background: #f5f3ff; }
+.timeline-dot.red    { border-color: #0f766e; background: #f0fdfa; }
+
+.timeline-content { flex: 1; min-width: 0; }
+
+.timeline-date {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--gray-400);
+  margin-bottom: 2px;
+}
+
+.timeline-case {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--royal);
+  font-weight: 500;
+  margin-bottom: 2px;
+}
+
+.timeline-desc {
+  font-size: 12px;
+  color: var(--gray-600);
+  line-height: 1.5;
+}
+
+/* ── MISSING: semantic color vars used in modal inline styles */
+:root {
+  --yellow:      #d97706;
+  --yellow-dim:  rgba(217, 119, 6, 0.08);
+  --green-dim:   rgba(22, 163, 74, 0.08);
+  --red-dim:     rgba(220, 38, 38, 0.08);
+  --text2:       var(--gray-600);
+  --text3:       var(--gray-400);
+  --accent2:     var(--sky);
+  --border:      var(--gray-100);
+}
+
+/* ── detail-event: add missing dot ──────────────────────────*/
+.detail-event {
+  display: flex;
+  gap: 14px;
+  padding-bottom: 12px;
+  position: relative;
+  align-items: flex-start;
+}
+
+.detail-event::before {
+  content: '';
+  position: absolute;
+  left: 82px;
+  top: 14px;
+  bottom: 0;
+  width: 1px;
+  background: var(--gray-200);
+}
+
+.detail-event:last-child::before { display: none; }
+
+/* ── NEWS PANEL ──────────────────────────────────────────── */
+.news-panel {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  z-index: 350;
+  background: var(--off-white);
+  display: none;
+  flex-direction: column;
+  overflow: hidden;
+}
+.news-panel.open { display: flex; }
+.news-panel-header {
+  background: var(--navy);
+  padding: 18px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 4px 24px rgba(13,31,60,0.35);
+}
+.news-panel-title {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--white);
+}
+.news-panel-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 32px 40px;
+  max-width: 1480px;
+  margin: 0 auto;
+  width: 100%;
+}
+.news-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+.news-card {
+  background: var(--white);
+  border: 1px solid var(--gray-100);
+  border-radius: 16px;
+  padding: 18px 20px;
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow 0.2s, transform 0.2s;
+  text-decoration: none;
+  display: block;
+  color: inherit;
+}
+.news-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+  border-color: var(--royal);
+}
+.news-card-source {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--royal);
+  margin-bottom: 8px;
+}
+.news-card-title {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--navy);
+  line-height: 1.4;
+  margin-bottom: 10px;
+}
+.news-card-date {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--gray-400);
+}
+.news-timeline-title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--navy);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.news-timeline-title::before {
+  content: '';
+  width: 3px; height: 14px;
+  background: var(--royal);
+  border-radius: 2px;
+}
+.news-tl-item {
+  display: flex;
+  gap: 14px;
+  padding-bottom: 14px;
+  position: relative;
+}
+.news-tl-item::after {
+  content: '';
+  position: absolute;
+  left: 4px; top: 12px; bottom: 0;
+  width: 1px;
+  background: var(--gray-100);
+}
+.news-tl-item:last-child::after { display: none; }
+.news-tl-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: var(--royal);
+  flex-shrink: 0;
+  margin-top: 3px;
+  z-index: 1;
+}
+.news-tl-content { flex: 1; }
+.news-tl-date {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--gray-400);
+  margin-bottom: 2px;
+}
+.news-tl-source {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--royal);
+  margin-bottom: 2px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.news-tl-title {
+  font-size: 13px;
+  color: var(--gray-800);
+  line-height: 1.5;
+  text-decoration: none;
+}
+.news-tl-title:hover { color: var(--royal); }
+.news-empty {
+  text-align: center;
+  padding: 80px 24px;
+  color: var(--gray-400);
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+/* ── RESPONSIVE ──────────────────────────────────────────── */
+@media (max-width: 1100px) {
+  .content-grid { grid-template-columns: 1fr; }
+  .kpi-row { grid-template-columns: repeat(3,1fr); }
+}
+
+@media (max-width: 680px) {
+  main { padding: 20px 16px 60px; }
+  .header-top { padding: 0 16px; }
+  .header-breadcrumb { padding: 8px 16px; }
+  .page-header { flex-direction: column; align-items: flex-start; gap: 10px; }
+  .kpi-row { grid-template-columns: repeat(2,1fr); }
+  .hdr-pill { display: none; }
+  .notif-drawer { width: 100%; }
+}
+</style>
+</head>
+<body>
+
+<!-- ── HEADER ──────────────────────────────────────────────── -->
+<header>
+  <div class="header-top">
+    <div class="logo-area">
+
+      <!-- PJUS Logo SVG — fiel à marca -->
+      <div style="display: flex; align-items: center; gap: 12px;">
+  
+  <svg width="40" height="42" viewBox="0 0 40 42" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink: 0;">
+    <path d="M5 36 C8 24, 14 14, 22 8 C26 5, 29 5, 30 7" stroke="#1a4b8c" stroke-width="3.0" stroke-linecap="round" fill="none"/>
+    <path d="M9 36 C12 25, 17 17, 24 12 C27 10, 30 10, 31 12" stroke="#1e6bbf" stroke-width="2.4" stroke-linecap="round" fill="none"/>
+    <path d="M13 36 C16 27, 20 20, 26 16 C29 14, 31 14, 32 16" stroke="#4a90d9" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+  </svg>
+
+  <div style="width: 1px; height: 24px; background-color: rgba(255,255,255,0.25);"></div>
+
+  <span style="color: #ffffff; font-family: Georgia, serif; font-size: 19px; font-weight: 700; letter-spacing: 1px; white-space: nowrap;">
+    Marco Regulatório - Varuna
+  </span>
+
+</div>
+
+
+    </div>
+
+    <div class="header-right">
+      <div class="hdr-pill connected" id="server-pill">
+        <div class="hdr-pill-dot"></div>
+        <span id="server-pill-text">Servidor Ativo</span>
+      </div>
+
+      <button class="hdr-btn hdr-btn-ghost" onclick="showWeeklyReport()">
+        ◧ &nbsp;Relatório
+      </button>
+
+      <button class="hdr-btn hdr-btn-ghost" id="news-btn" onclick="showNewsPanel()">
+        📰 &nbsp;Notícias
+      </button>
+
+      <div class="notif-btn-wrap">
+        <button class="hdr-btn hdr-btn-ghost" id="notif-bell-btn" onclick="showNotificationsPanel()">
+          ⌖ &nbsp;Notificações
+        </button>
+        <div class="notif-unread-dot" id="notif-badge"></div>
+      </div>
+
+      <button class="hdr-btn hdr-btn-primary" id="check-btn" onclick="runCheck()">
+        <div class="spinner"></div>
+        <span class="btn-label">↺ &nbsp;Verificar Agora</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="header-breadcrumb">
+    <span>PJUS</span>
+    <span class="breadcrumb-sep">›</span>
+    <span>Monitoramento</span>
+    <span class="breadcrumb-sep">›</span>
+    <span class="breadcrumb-active">Marco Regulatório — Precatórios</span>
+  </div>
+</header>
+
+<!-- ── MAIN ────────────────────────────────────────────────── -->
+<main>
+
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="page-title">
+      <span>Painel de Controle</span>
+      Monitoramento Regulatório
+    </div>
+    <div class="page-meta">
+      <strong id="page-date">—</strong>
+      <span id="status-text">Inicializando sistema...</span>
+    </div>
+  </div>
+
+  <!-- KPI Row -->
+  <div class="kpi-row">
+    <div class="kpi-card blue">
+      <div class="kpi-label">Total de Casos</div>
+      <div class="kpi-value" id="stat-total">19</div>
+      <div class="kpi-desc">Em monitoramento ativo</div>
+    </div>
+    <div class="kpi-card green">
+      <div class="kpi-label">Casos Ativos</div>
+      <div class="kpi-value" id="stat-active">—</div>
+      <div class="kpi-desc">Com tramitação em curso</div>
+    </div>
+    <div class="kpi-card amber">
+      <div class="kpi-label">Suspensos</div>
+      <div class="kpi-value" id="stat-suspended">—</div>
+      <div class="kpi-desc">Aguardando prazo</div>
+    </div>
+    <div class="kpi-card purple">
+      <div class="kpi-label">Encerrados</div>
+      <div class="kpi-value" id="stat-closed">—</div>
+      <div class="kpi-desc">Transitados em julgado</div>
+    </div>
+    <div class="kpi-card slate">
+      <div class="kpi-label">Última Verificação</div>
+      <div class="kpi-value" id="stat-lastcheck">—</div>
+      <div class="kpi-desc" id="stat-lastcheck-label">Nunca verificado</div>
+    </div>
+  </div>
+
+  <!-- Content Grid -->
+  <div class="content-grid">
+
+    <!-- Left: Main Table -->
+    <div>
+      <div class="section-card">
+        <div class="section-card-header">
+          <div class="section-card-title">Casos Monitorados</div>
+          <span style="font-size:11px;color:var(--gray-400);font-family:var(--font-mono)" id="table-count">— casos</span>
+        </div>
+
+        <div class="toolbar">
+          <div class="search-wrap">
+            <span class="search-icon-inner">⌕</span>
+            <input class="search-field" type="text" placeholder="Buscar por caso, tribunal ou status..." id="search-input" oninput="filterTable()">
+          </div>
+          <div class="filter-group">
+            <button class="filter-chip active" onclick="setFilter('todos',this)">Todos</button>
+            <button class="filter-chip" onclick="setFilter('STF',this)">STF</button>
+            <button class="filter-chip" onclick="setFilter('STJ',this)">STJ</button>
+            <button class="filter-chip" onclick="setFilter('Câmara',this)">Câmara</button>
+            <button class="filter-chip" onclick="setFilter('TCE',this)">TCE</button>
+            <button class="filter-chip" onclick="setFilter('Judicial',this)">Judicial</button>
+          </div>
+          <div class="filter-group">
+            <button class="filter-chip" onclick="setFilter('ativo',this)">Ativos</button>
+            <button class="filter-chip" onclick="setFilter('encerrado',this)">Encerrados</button>
+            <button class="filter-chip" onclick="setFilter('suspenso',this)">Suspensos</button>
+          </div>
+        </div>
+
+        <table class="data-table" id="main-table">
+          <thead>
+            <tr>
+              <th style="width:200px">Identificação</th>
+              <th style="width:90px">Órgão</th>
+              <th style="width:100px">Status</th>
+              <th>Última Movimentação</th>
+              <th style="width:90px">Início Acomp.</th>
+              <th style="width:28px"></th>
+            </tr>
+          </thead>
+          <tbody id="table-body"></tbody>
+        </table>
+      </div>
+
+      <!-- Timeline -->
+      <div class="section-card">
+        <div class="section-card-header">
+          <div class="section-card-title">Linha do Tempo — Movimentações Recentes</div>
+        </div>
+        <div class="timeline-list" id="timeline-list"></div>
+      </div>
+    </div>
+
+    <!-- Right: Sidebar -->
+    <div class="sidebar">
+
+      <!-- Next check countdown -->
+      <div class="side-card">
+        <div class="side-card-header">
+          Próxima Verificação
+        </div>
+        <div class="side-card-body">
+          <div class="countdown-value" id="next-check-display">—</div>
+          <div class="countdown-label" id="next-check-label">verificação semanal programada</div>
+          <div class="progress-track">
+            <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Activity Log -->
+      <div class="side-card">
+        <div class="side-card-header">
+          Log de Atividade
+          <span style="font-size:10px;color:var(--gray-400);font-family:var(--font-mono)" id="log-count"></span>
+        </div>
+        <div class="side-card-body" style="padding:8px 14px">
+          <div class="log-list" id="activity-log">
+            <div class="log-entry">
+              <span class="log-time">—</span>
+              <span class="log-msg">Aguardando inicialização...</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tribunal breakdown -->
+      <div class="side-card">
+        <div class="side-card-header">Distribuição por Órgão</div>
+        <div class="side-card-body" style="padding:12px 14px">
+          <div id="trib-breakdown"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<!-- ── NOTIFICATIONS DRAWER ─────────────────────────────────── -->
+<div class="notif-overlay" id="notif-overlay" onclick="closeNotificationsPanel()"></div>
+<div class="notif-drawer" id="notif-drawer">
+  <div class="notif-drawer-header">
+    <div class="notif-drawer-title">Central de Notificações</div>
+    <div class="notif-drawer-actions">
+      <button class="btn btn-outline btn-sm" style="border-color:rgba(255,255,255,0.2);color:rgba(255,255,255,0.7);background:transparent" onclick="markAllRead()">Marcar todas como lidas</button>
+      <button class="btn btn-outline btn-sm" style="border-color:rgba(255,255,255,0.2);color:rgba(255,255,255,0.7);background:transparent" onclick="closeNotificationsPanel()">✕</button>
+    </div>
+  </div>
+  <div class="notif-drawer-body" id="notif-drawer-body">
+    <div class="notif-empty">Carregando notificações...</div>
+  </div>
+</div>
+
+<!-- ── NEWS PANEL ───────────────────────────────────────────── -->
+<div class="news-panel" id="news-panel">
+  <div class="news-panel-header">
+    <div class="news-panel-title">📰 Notícias sobre Precatórios</div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <span style="font-size:11px;color:rgba(255,255,255,0.5);font-family:var(--font-mono)" id="news-last-update"></span>
+      <button class="btn btn-outline btn-sm" style="border-color:rgba(255,255,255,0.2);color:rgba(255,255,255,0.7);background:transparent" onclick="closeNewsPanel()">✕ Fechar</button>
+    </div>
+  </div>
+  <div class="news-panel-body" id="news-panel-body">
+    <div class="news-empty">Carregando notícias...</div>
+  </div>
+</div>
+
+<!-- ── MODAL ────────────────────────────────────────────────── -->
+<div class="modal-backdrop" id="modal-backdrop">
+  <div class="modal-box" id="modal-box">
+    <div id="modal-content"></div>
+  </div>
+</div>
+
+<!-- ── TOAST STACK ──────────────────────────────────────────── -->
+<div class="toast-stack" id="toast-stack"></div>
+
+<script>
+
+// ═══════════════════════════════════════════════════════════════
+//  DATA — Casos extraídos do PDF com histórico completo
+// ═══════════════════════════════════════════════════════════════
+const CASES = [
+  {
+    id: 'PL504',
+    name: 'PL 504/2024',
+    tribunal: 'Câmara',
+    badgeClass: 'trib-camara',
+    descricao: 'Projeto de Lei em tramitação na Câmara dos Deputados, acompanhado pela CCJC.',
+    status: 'ativo',
+    inicioAcomp: '2024-08-27',
+    ultimaAtualizacao: '2024-11-04',
+    ultimaDescricao: 'Procurador-geral federal foi intimado.',
+    fonte: 'https://www.camara.leg.br/proposicoesWeb/fichadetramitacao?idProposicao=2418993',
+    historico: []
+  },
+  {
+    id: 'ADI7703',
+    name: 'ADI 7703',
+    tribunal: 'STF',
+    badgeClass: 'trib-stf',
+    descricao: 'Ação Direta de Inconstitucionalidade no STF sobre marco regulatório de precatórios.',
+    status: 'ativo',
+    inicioAcomp: '2024-09-18',
+    ultimaAtualizacao: '2025-09-25',
+    ultimaDescricao: 'Conclusos ao relator. Intimado PGE-PE e PGE-MT em 26/09. PGE-RR em 06/10.',
+    fonte: 'https://portal.stf.jus.br/processos/detalhe.asp?incidente=7004505',
+    historico: []
+  },
+  {
+    id: 'PL2581',
+    name: 'PL 2581/24',
+    tribunal: 'Câmara',
+    badgeClass: 'trib-camara',
+    descricao: 'Projeto de Lei tramitando na Câmara, recebido pela CCJC e CCP.',
+    status: 'ativo',
+    inicioAcomp: '2024-09-24',
+    ultimaAtualizacao: '2025-02-18',
+    ultimaDescricao: 'Processo recebido na origem.',
+    fonte: 'https://www.camara.leg.br/proposicoesWeb/fichadetramitacao?idProposicao=2443476',
+    historico: []
+  },
+  {
+    id: 'RE1515163',
+    name: 'RE 1515163',
+    tribunal: 'STF',
+    badgeClass: 'trib-stf',
+    descricao: 'Recurso Extraordinário no STF sobre precatórios.',
+    status: 'ativo',
+    inicioAcomp: '2024-09-27',
+    ultimaAtualizacao: '2025-10-14',
+    ultimaDescricao: 'Conclusos ao relator.',
+    fonte: 'https://portal.stf.jus.br/processos/detalhe.asp?incidente=7035265',
+    historico: []
+  },
+  {
+    id: 'PL2354',
+    name: 'PL 2354/2024',
+    tribunal: 'Câmara',
+    badgeClass: 'trib-camara',
+    descricao: 'Projeto de Lei na Câmara relacionado ao marco regulatório de precatórios.',
+    status: 'ativo',
+    inicioAcomp: '2024-10-22',
+    ultimaAtualizacao: '2025-02-18',
+    ultimaDescricao: 'Processo recebido na origem.',
+    fonte: 'https://www.camara.leg.br/proposicoesWeb/fichadetramitacao?idProposicao=2440521',
+    historico: []
+  },
+  {
+    id: 'RE678360',
+    name: 'RE 678360',
+    tribunal: 'STF',
+    badgeClass: 'trib-stf',
+    descricao: 'Recurso Extraordinário no STF. Processo suspenso por convenção das partes.',
+    status: 'suspenso',
+    inicioAcomp: '2024-11-26',
+    ultimaAtualizacao: '2025-11-12',
+    ultimaDescricao: 'Processo suspenso por convenção das partes.',
+    fonte: 'https://portal.stf.jus.br/processos/detalhe.asp?incidente=4219076',
+    historico: []
+  },
+  {
+    id: 'TCESP',
+    name: 'TCE/SP (00016837.989.24-3)',
+    tribunal: 'TCE',
+    badgeClass: 'trib-tce',
+    descricao: 'Processo no Tribunal de Contas do Estado de São Paulo sobre precatórios.',
+    status: 'encerrado',
+    inicioAcomp: '2024-12-13',
+    ultimaAtualizacao: '2025-09-16',
+    ultimaDescricao: 'Arquivado.',
+    // TODO: confirmar URL direta do processo no TCE-SP (número 00016837.989.24-3)
+    fonte: 'https://www.tce.sp.gov.br/processos',
+    historico: []
+  },
+
+  {
+    id: 'PROC1078035',
+    name: '1078035-43.2024.4.01.3300',
+    tribunal: 'Judicial',
+    badgeClass: 'trib-judicial',
+    descricao: 'Processo judicial federal — 1ª Região. Amicus curiae aceito.',
+    status: 'ativo',
+    inicioAcomp: '2025-01-23',
+    ultimaAtualizacao: '2025-09-22',
+    ultimaDescricao: 'Despacho deferindo pedidos de ingresso como amici curiae de diversos entes, incluindo Município de SP e sindicatos.',
+    fonte: 'https://pje1g-consultapublica.trf1.jus.br/consultapublica/ConsultaPublica/DetalheProcessoConsultaPublica/listView.seam?ca=bd957c50e88916eaa47784587efb8ff1f12508038c5c97a5',
+    historico: []
+  },
+  {
+    id: 'RE1516074',
+    name: 'RE 1516074 (Tema 1349)',
+    tribunal: 'STF',
+    badgeClass: 'trib-stf',
+    descricao: 'Recurso Extraordinário com repercussão geral — Tema 1349.',
+    status: 'encerrado',
+    inicioAcomp: '2025-01-23',
+    ultimaAtualizacao: '2025-05-20',
+    ultimaDescricao: 'Transitado em julgado.',
+    fonte: 'https://portal.stf.jus.br/processos/detalhe.asp?incidente=7037768',
+    historico: []
+  },
+  {
+    id: 'RE922144',
+    name: 'RE 922144 (Tema 865)',
+    tribunal: 'STF',
+    badgeClass: 'trib-stf',
+    descricao: 'O STF definiu que a responsabilidade de provar adimplência com precatórios é do município. RE negado, processo devolvido ao TJMG.',
+    status: 'encerrado',
+    inicioAcomp: '2025-01-23',
+    ultimaAtualizacao: '2025-10-06',
+    ultimaDescricao: 'Processo recebido na origem — TJMG.',
+    fonte: 'https://portal.stf.jus.br/processos/detalhe.asp?incidente=4864567',
+    historico: []
+  },
+  {
+    id: 'REC7879',
+    name: 'Rcl 78529/AM',
+    tribunal: 'STF',
+    badgeClass: 'trib-stf',
+    descricao: 'Reclamação no STF originária do Amazonas relacionada a precatórios.',
+    status: 'suspenso',
+    inicioAcomp: '2025-01-23',
+    ultimaAtualizacao: null,
+    ultimaDescricao: 'Aguardando primeira verificação.',
+    fonte: 'https://portal.stf.jus.br/processos/detalhe.asp?incidente=7226551',
+    historico: []
+  },
+  {
+    id: 'PEC66',
+    name: 'PEC 66/2023',
+    tribunal: 'Câmara',
+    badgeClass: 'trib-camara',
+    descricao: 'PEC promulgada em 09/09/2025 como EC nº 136/2025. Estabelece novas regras para pagamento de precatórios e parcelamento de débitos previdenciários.',
+    status: 'encerrado',
+    inicioAcomp: '2025-04-30',
+    ultimaAtualizacao: '2025-09-09',
+    ultimaDescricao: 'Promulgada como Emenda Constitucional nº 136/2025.',
+    fonte: 'https://www.camara.leg.br/proposicoesWeb/fichadetramitacao?idProposicao=2454495',
+    historico: []
+  },
+  {
+    id: 'RE970343',
+    name: 'RE 970343',
+    tribunal: 'STF',
+    badgeClass: 'trib-stf',
+    descricao: 'Recurso Extraordinário no STF. Transitado em julgado com baixa definitiva dos autos.',
+    status: 'encerrado',
+    inicioAcomp: '2025-05-20',
+    ultimaAtualizacao: '2025-06-17',
+    ultimaDescricao: 'Transitado em julgado — Baixa definitiva dos autos — Processo recebido na origem.',
+    fonte: 'https://portal.stf.jus.br/processos/detalhe.asp?incidente=4981758',
+    historico: []
+  },
+
+  {
+    id: 'ADI7435',
+    name: 'ADI 7435',
+    tribunal: 'STF',
+    badgeClass: 'trib-stf',
+    descricao: 'Ação Direta de Inconstitucionalidade. Amicus curiae do IAB Nacional em 24/09/2025.',
+    status: 'ativo',
+    inicioAcomp: '2025-05-30',
+    ultimaAtualizacao: '2025-10-29',
+    ultimaDescricao: 'Publicado em 29/10/2025.',
+    fonte: 'https://portal.stf.jus.br/processos/detalhe.asp?incidente=6721181',
+    historico: []
+  },
+  {
+    id: 'RE1558191',
+    name: 'RE 1558191/SP',
+    tribunal: 'STF',
+    badgeClass: 'trib-stf',
+    descricao: 'STF manteve a Taxa Selic como taxa legal de juros de mora (art. 406 CC), rejeitando tese de 1% ao mês do CTN. Recurso negado por unanimidade.',
+    status: 'encerrado',
+    inicioAcomp: '2025-09-08',
+    ultimaAtualizacao: '2025-10-30',
+    ultimaDescricao: 'Transitado em julgado. Baixa definitiva dos autos.',
+    fonte: 'https://portal.stf.jus.br/processos/detalhe.asp?incidente=7298583',
+    historico: []
+  },
+  {
+    id: 'ADI7873',
+    name: 'ADI 7873',
+    tribunal: 'STF',
+    badgeClass: 'trib-stf',
+    descricao: 'ADI com vista ao Advogado-Geral da União em 07/10/2025. Sem atualizações recentes.',
+    status: 'ativo',
+    inicioAcomp: '2025-09-10',
+    ultimaAtualizacao: '2025-10-07',
+    ultimaDescricao: 'Termo de Vista: Secretaria Judiciária faz remessa dos autos com vista ao AGU.',
+    fonte: 'https://portal.stf.jus.br/processos/detalhe.asp?incidente=7366591',
+    historico: []
+  },
+  {
+    id: 'PL4072',
+    name: 'PL 4072/2025',
+    tribunal: 'Câmara',
+    badgeClass: 'trib-camara',
+    descricao: 'PL do Dep. José Medeiros que autoriza venda/cessão de créditos previdenciários inscritos em precatórios ou RPVs.',
+    status: 'ativo',
+    inicioAcomp: '2026-01-07',
+    ultimaAtualizacao: '2025-12-17',
+    ultimaDescricao: 'Aberto prazo para emendas na CPASF por 5 sessões a partir de 18/12/2025.',
+    fonte: 'https://www.camara.leg.br/proposicoesWeb/fichadetramitacao?idProposicao=2549050',
+    historico: []
+  },
+  {
+    id: 'RESP2217133',
+    name: 'REsp 2217133/RS',
+    tribunal: 'STJ',
+    badgeClass: 'trib-stj',
+    descricao: 'Recurso Especial no Superior Tribunal de Justiça originário do Rio Grande do Sul.',
+    status: 'ativo',
+    inicioAcomp: '2026-03-13',
+    ultimaAtualizacao: null,
+    ultimaDescricao: 'Caso recém-adicionado. Aguardando primeira verificação.',
+    fonte: 'https://processo.stj.jus.br/processo/pesquisa/?termo=RESP2217133&aplicacao=processos.ea&tipoPesquisa=tipoPesquisaGenerica&chkordem=DESC&chkMorto=MORTO',
+    historico: []
+  },
+];
+
+// ═══════════════════════════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════════════════════════
+let dynamicState = {};
+
+async function loadDynamicState() {
+  try {
+    const r = await fetch('http://localhost:5000/api/state');
+    if (r.ok) dynamicState = await r.json();
+  } catch(e) {}
+}
+
+const API_BASE = 'http://localhost:5000/api';
+
+let state = {
+  filter: 'todos',
+  searchText: '',
+  lastCheck: null,
+  nextCheck: null,
+  checkInterval: 24 * 60 * 60 * 1000, // 1 dia
+  log: [],
+  changes: [],
+};
+
+// Load from localStorage
+ function loadState() {
+  try {
+    const saved = localStorage.getItem('monitor_regulatorio_state');
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      state.lastCheck = parsed.lastCheck || null;
+      state.nextCheck = parsed.nextCheck || null;
+      state.log = parsed.log || [];
+      state.changes = parsed.changes || [];
+    }
+  } catch(e) {}
+}
+
+function saveState() {
+  try {
+    localStorage.setItem('monitor_regulatorio_state', JSON.stringify({
+      lastCheck: state.lastCheck,
+      nextCheck: state.nextCheck,
+      log: state.log.slice(0, 50),
+      changes: state.changes.slice(0, 100),
+    }));
+  } catch(e) {}
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  RENDER TABLE
+// ═══════════════════════════════════════════════════════════════
+function statusBadge(status) {
+  const map = {
+    'ativo': ['status-ativo', '🟢 Ativo'],
+    'encerrado': ['status-encerrado', 'Encerrado'],
+    'suspenso': ['status-suspenso', 'Suspenso'],
+    'julgado': ['status-encerrado', 'Encerrado'],
+    'novo': ['status-ativo', 'Novo'],
+  };
+  const [cls, label] = map[status] || ['status-ativo', status];
+  return `<span class="status-badge ${cls}"><span class="status-dot-sm"></span>${label}</span>`;
+}
+
+function formatDate(dateStr) {
+  if (!dateStr || dateStr === '—') return '—';
+  // Se já está no formato DD/MM/YYYY, retorna direto
+  if (/^\d{2}\/\d{2}\/\d{4}$/.test(dateStr)) return dateStr;
+  // Se está no formato YYYY-MM-DD, converte
+  if (/^\d{4}-\d{2}-\d{2}/.test(dateStr)) {
+    const d = new Date(dateStr + 'T00:00:00');
+    return d.toLocaleDateString('pt-BR', { day:'2-digit', month:'2-digit', year:'numeric' });
+  }
+  return dateStr;
+}
+
+function filterCases() {
+  let filtered = [...CASES];
+  
+  if (state.filter !== 'todos') {
+    if (['ativo','encerrado','suspenso'].includes(state.filter)) {
+      filtered = filtered.filter(c => c.status === state.filter);
+    } else {
+      filtered = filtered.filter(c => c.tribunal.includes(state.filter));
+    }
+  }
+
+  if (state.searchText) {
+    const q = state.searchText.toLowerCase();
+    filtered = filtered.filter(c =>
+      c.name.toLowerCase().includes(q) ||
+      c.tribunal.toLowerCase().includes(q) ||
+      c.descricao.toLowerCase().includes(q) ||
+      c.status.toLowerCase().includes(q)
+    );
+  }
+
+  return filtered;
+}
+
+function renderTable() {
+  const cases = filterCases();
+  const countEl = document.getElementById('table-count');
+  if (countEl) countEl.textContent = cases.length + ' caso' + (cases.length!==1?'s':'');
+  const tbody = document.getElementById('table-body');
+
+  if (cases.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:32px;color:var(--text3);font-style:italic">Nenhum caso encontrado.</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = cases.map(c => `
+    <tr onclick="toggleDetail('${c.id}')">
+      <td>
+        <div class="case-name">${c.name}</div>
+        <div class="case-desc">${c.descricao.slice(0,80)}${c.descricao.length > 80 ? '…' : ''}</div>
+      </td>
+      <td><span class="badge ${c.badgeClass}">${c.tribunal}</span></td>
+      <td>${statusBadge(c.status)}</td>
+      <td>
+        <div class="update-date">${formatDate(c.ultimaAtualizacao)}</div>
+        <div class="update-text">${c.ultimaDescricao}</div>
+      </td>
+      <td><div class="update-date">${formatDate(c.inicioAcomp)}</div></td>
+      <td style="text-align:center;color:var(--text3);font-size:12px">▾</td>
+    </tr>
+    <tr class="detail-row" id="detail-${c.id}">
+      <td class="detail-cell" colspan="6">
+        <div class="detail-timeline">
+          ${(() => {
+  const dynamic = dynamicState[c.id];
+  const eventos = (dynamic && dynamic.eventos_recentes && dynamic.eventos_recentes.length > 0)
+    ? dynamic.eventos_recentes.map(e => ({ data: e.data, evento: e.descricao, dinamico: true }))
+    : [...c.historico].sort((a,b) => new Date(b.data) - new Date(a.data));
+
+  return eventos.map(h => `
+    <div class="detail-event">
+      <div class="detail-event-date">${formatDate(h.data)}</div>
+      <div class="detail-event-dot"></div>
+      <div class="detail-event-text">${h.evento}</div>
+    </div>
+  `).join('');
+})()}
+${(() => {
+  const dynamic = dynamicState[c.id];
+  return (dynamic && dynamic.eventos_recentes && dynamic.eventos_recentes.length > 0)
+    ? `<div style="font-size:10px;color:var(--gray-400);font-family:var(--font-mono);margin-top:8px;letter-spacing:0.06em">
+         ↻ ATUALIZADO AUTOMATICAMENTE · ${dynamic.verificado_em ? new Date(dynamic.verificado_em).toLocaleDateString('pt-BR') : ''}
+       </div>`
+    : `<div style="font-size:10px;color:var(--gray-400);font-family:var(--font-mono);margin-top:8px;letter-spacing:0.06em">
+         HISTÓRICO ESTÁTICO · atualize via Verificar Agora
+       </div>`;
+})()}
+          ${c.fonte ? `<a class="source-link" href="${c.fonte}" target="_blank">🔗 Ver fonte oficial ↗</a>` : ''}
+        </div>
+      </td>
+    </tr>
+  `).join('');
+}
+
+function toggleDetail(id) {
+  const row = document.getElementById(`detail-${id}`);
+  row.classList.toggle('open');
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  RENDER TIMELINE
+// ═══════════════════════════════════════════════════════════════
+function renderTimeline() {
+  const allEvents = [];
+  CASES.forEach(c => {
+    c.historico.forEach(h => {
+      allEvents.push({ ...h, caseName: c.name, caseId: c.id, tribunal: c.tribunal });
+    });
+  });
+
+  allEvents.sort((a, b) => new Date(b.data) - new Date(a.data));
+
+  const colorMap = { 'STF': 'blue', 'Câmara': 'yellow', 'TCE': 'purple', 'Judicial': 'green', 'STJ': 'red', 'Outros': 'red' };
+
+  const wrap = document.getElementById('timeline-list');
+  if (!wrap) return;
+  wrap.innerHTML = allEvents.slice(0, 40).map(ev => `
+    <div class="timeline-item">
+      <div class="timeline-dot ${colorMap[ev.tribunal] || 'blue'}"></div>
+      <div class="timeline-content">
+        <div class="timeline-date">${formatDate(ev.data)}</div>
+        <div class="timeline-case">${ev.caseName}</div>
+        <div class="timeline-desc">${ev.evento}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  ACTIVITY LOG
+// ═══════════════════════════════════════════════════════════════
+function addLog(msg, type = 'info') {
+  const now = new Date().toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' });
+  state.log.unshift({ time: now, msg, type });
+  renderLog();
+}
+
+function renderLog() {
+  const container = document.getElementById('activity-log');
+  if (state.log.length === 0) {
+    container.innerHTML = `<div class="log-item"><span class="log-time">—</span><span class="log-msg">Nenhuma atividade registrada.</span></div>`;
+    return;
+  }
+  container.innerHTML = state.log.slice(0, 8).map(l => `
+    <div class="log-item">
+      <span class="log-time">${l.time}</span>
+      <span class="log-msg log-${l.type}">${l.msg}</span>
+    </div>
+  `).join('');
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  NEXT CHECK TIMER
+// ═══════════════════════════════════════════════════════════════
+function updateNextCheckDisplay() {
+  if (!state.nextCheck) {
+    document.getElementById('next-check-display').textContent = 'Não agendado';
+    document.getElementById('progress-fill').style.width = '0%';
+    return;
+  }
+
+  const now = Date.now();
+  const next = state.nextCheck;
+  const last = state.lastCheck || (next - state.checkInterval);
+  const total = next - last;
+  const elapsed = now - last;
+  const pct = Math.min(100, Math.max(0, (elapsed / total) * 100));
+
+  const remaining = next - now;
+  if (remaining <= 0) {
+    document.getElementById('next-check-display').textContent = 'Agora!';
+    document.getElementById('progress-fill').style.width = '100%';
+    runCheck();
+    return;
+  }
+
+  const days = Math.floor(remaining / 86400000);
+  const hours = Math.floor((remaining % 86400000) / 3600000);
+  const mins = Math.floor((remaining % 3600000) / 60000);
+
+  let display = '';
+  if (days > 0) display = `${days}d ${hours}h`;
+  else if (hours > 0) display = `${hours}h ${mins}min`;
+  else display = `${mins}min`;
+
+  document.getElementById('next-check-display').textContent = display;
+  document.getElementById('next-check-label').textContent = `próxima verificação automática`;
+  document.getElementById('progress-fill').style.width = `${pct}%`;
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  STATS
+// ═══════════════════════════════════════════════════════════════
+function updateStats() {
+  const total = CASES.length;
+  const active = CASES.filter(c => c.status === 'ativo').length;
+  const suspended = CASES.filter(c => c.status === 'suspenso').length;
+  const closed = CASES.filter(c => c.status === 'encerrado').length;
+
+  document.getElementById('stat-total').textContent = total;
+  document.getElementById('stat-active').textContent = active;
+  document.getElementById('stat-suspended').textContent = suspended;
+  document.getElementById('stat-closed').textContent = closed;
+
+  if (state.lastCheck) {
+    const d = new Date(state.lastCheck);
+    document.getElementById('stat-lastcheck').textContent = d.toLocaleDateString('pt-BR', {day:'2-digit', month:'2-digit'});
+    document.getElementById('stat-lastcheck-label').textContent = d.toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'});
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  LIVE STATE — sobrescreve dados do CASES com resultado do Playwright
+// ═══════════════════════════════════════════════════════════════
+async function loadLiveState() {
+  if (!serverOnline) return;
+  try {
+    const r = await fetch(`${API_BASE}/state`);
+    if (!r.ok) return;
+    const liveData = await r.json();
+
+    // Sobrescreve cada caso do array CASES com os dados ao vivo
+    CASES.forEach(c => {
+      const live = liveData[c.id];
+      if (!live) return;
+      if (live.ultima_data && live.ultima_data !== '—') {
+        c.ultimaAtualizacao = live.ultima_data.split('/').reverse().join('-'); // DD/MM/YYYY → YYYY-MM-DD
+        c.ultimaDescricao   = live.ultima_descricao;
+      }
+      if (live.eventos_recentes && live.eventos_recentes.length > 0) {
+        c.historico = live.eventos_recentes.map(e => ({
+          data:   e.data.split('/').reverse().join('-'), // DD/MM/YYYY → YYYY-MM-DD
+          evento: e.descricao,
+        }));
+      }
+      if (live.verificado_em) {
+        c._verificado_em = live.verificado_em;
+      }
+    });
+
+    renderTable();
+    renderTimeline();
+    updateStats();
+  } catch(e) {
+    console.warn('loadLiveState erro:', e);
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  FILTER + SEARCH
+// ═══════════════════════════════════════════════════════════════
+function setFilter(f, btn) {
+  state.filter = f;
+  document.querySelectorAll('.filter-chip').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderTable();
+}
+
+function filterTable() {
+  state.searchText = document.getElementById('search-input').value;
+  renderTable();
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  TOAST
+// ═══════════════════════════════════════════════════════════════
+function showToast(msg, icon = 'ℹ️') {
+  const container = document.getElementById('toast-stack');
+  const toast = document.createElement('div');
+  toast.className = 'toast-item';
+  toast.innerHTML = `<span>${icon}</span><span>${msg}</span>`;
+  container.appendChild(toast);
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => toast.classList.add('show'));
+  });
+  setTimeout(() => {
+    toast.classList.add('hide');
+    setTimeout(() => toast.remove(), 350);
+  }, 4000);
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  MODAL
+// ═══════════════════════════════════════════════════════════════
+function showModal(rawContent) {
+  // Wrap non-header/footer content in a padded body div
+  const tmp = document.createElement('div');
+  tmp.innerHTML = rawContent;
+  
+  const header = tmp.querySelector('.modal-header, .modal-header-bar');
+  const footer = tmp.querySelector('.modal-footer, .modal-footer-bar');
+  
+  if (header && footer) {
+    // Collect body nodes (between header and footer)
+    const bodyNodes = [];
+    let node = header.nextSibling;
+    while (node && node !== footer) {
+      bodyNodes.push(node.cloneNode(true));
+      node = node.nextSibling;
+    }
+    const bodyDiv = document.createElement('div');
+    bodyDiv.style.cssText = 'padding:20px 28px';
+    bodyNodes.forEach(n => bodyDiv.appendChild(n));
+    
+    const out = document.createElement('div');
+    out.appendChild(header.cloneNode(true));
+    out.appendChild(bodyDiv);
+    out.appendChild(footer.cloneNode(true));
+    document.getElementById('modal-content').innerHTML = out.innerHTML;
+  } else {
+    document.getElementById('modal-content').innerHTML = rawContent;
+  }
+  
+  document.getElementById('modal-backdrop').classList.add('visible');
+}
+
+function closeModal() {
+  document.getElementById('modal-backdrop').classList.remove('visible');
+}
+
+// ═══════════════════════════════════════════════════════════════
+
+// ═══════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════
+//  API SERVER INTEGRATION
+// ═══════════════════════════════════════════════════════════════
+let serverOnline = false;
+let notificationsData = [];
+
+async function checkServerStatus() {
+  try {
+    const r = await fetch(`${API_BASE}/status`, { signal: AbortSignal.timeout(2000) });
+    if (r.ok) {
+      const data = await r.json();
+      serverOnline = true;
+      updateServerBadge(true);
+      // Update scheduler info
+      if (data.scheduler?.next_run) {
+        state.nextCheck = new Date(data.scheduler.next_run).getTime();
+        state.lastCheck = data.scheduler.last_run ? new Date(data.scheduler.last_run).getTime() : null;
+        updateStats();
+        updateNextCheckDisplay();
+      }
+      // Update unread badge
+      const unread = data.notificacoes_nao_lidas || 0;
+      updateNotifBadge(unread);
+      return true;
+    }
+  } catch(e) {}
+  serverOnline = false;
+  updateServerBadge(false);
+  return false;
+}
+
+function updateServerBadge(online) {
+  // Update status pill
+  const pill = document.getElementById('server-pill');
+  const dot = pill ? pill.querySelector('.hdr-pill-dot') : null;
+  const text = document.getElementById('status-text');
+  if (online) {
+    if(pill) { pill.className='hdr-pill connected'; }
+    if(text) text.textContent = 'Servidor Ativo';
+  } else {
+    if(pill) { pill.className='hdr-pill offline'; }
+    if(text) text.textContent = 'Modo Offline';
+  }
+}
+
+function updateNotifBadge(count) {
+  const badge = document.getElementById('notif-badge');
+  if (count > 0) {
+    badge.style.display = 'block';
+  } else {
+    badge.style.display = 'none';
+  }
+}
+
+// ── NOTIFICATIONS PANEL ──────────────────────────────────────
+
+function showNotificationsPanel() {
+  document.getElementById('notif-drawer').classList.add('open');
+  document.getElementById('notif-overlay').classList.add('open');
+  loadNotifications();
+}
+
+function closeNotificationsPanel() {
+  document.getElementById('notif-drawer').classList.remove('open');
+  document.getElementById('notif-overlay').classList.remove('open');
+}
+
+async function loadNotifications() {
+  const body = document.getElementById('notif-drawer-body');
+
+  if (!serverOnline) {
+    // Fallback: show from localStorage
+    const local = state.changes || [];
+    if (local.length === 0) {
+      body.innerHTML = `<div class="notif-empty">🔌 Servidor offline.<br><br>Inicie o <code style="color:var(--accent2)">server.py</code> para ver o histórico completo de notificações.</div>`;
+    } else {
+      renderNotifications(local.map((c, i) => ({
+        id: `local_${i}`,
+        timestamp: c.timestamp || new Date().toISOString(),
+        triggered_by: 'manual',
+        mudancas: 1,
+        changes: [c],
+        lida: true,
+      })));
+    }
+    return;
+  }
+
+  try {
+    const r = await fetch(`${API_BASE}/notifications?limit=50`);
+    notificationsData = await r.json();
+    renderNotifications(notificationsData);
+    updateNotifBadge(notificationsData.filter(n => !n.lida).length);
+  } catch(e) {
+    body.innerHTML = `<div class="notif-empty">Erro ao carregar notificações.</div>`;
+  }
+}
+
+function renderNotifications(data) {
+  const body = document.getElementById('notif-drawer-body');
+  if (!data || data.length === 0) {
+    body.innerHTML = `<div class="notif-empty">✅ Nenhuma notificação ainda.<br><br>As notificações aparecerão aqui após a primeira verificação.</div>`;
+    return;
+  }
+
+  body.innerHTML = data.map(n => {
+    const dt = new Date(n.timestamp);
+    const dateStr = dt.toLocaleDateString('pt-BR', {day:'2-digit',month:'2-digit',year:'numeric'});
+    const timeStr = dt.toLocaleTimeString('pt-BR', {hour:'2-digit',minute:'2-digit'});
+    const unreadClass = n.lida ? '' : 'unread';
+    const triggerClass = n.triggered_by === 'automatico' ? 'auto' : 'manual';
+    const triggerLabel = n.triggered_by === 'automatico' ? '🤖 Auto' : '👆 Manual';
+
+    const changesHtml = n.changes && n.changes.length > 0
+      ? n.changes.map(c => `
+          <div class="notif-change-item">
+            <div class="notif-change-case">${c.name || c.caso || ''}</div>
+            <div class="notif-change-desc">${(c.desc_nova || c.descricao || '').slice(0, 160)}</div>
+            <div class="notif-change-date">${c.data_nova || c.data || ''}</div>
+          </div>
+        `).join('')
+      : '';
+
+    const hasError = n.erro_msg;
+    const summaryText = hasError
+      ? `<span style="color:var(--red-border,#fca5a5)">⚠ Erro na verificação</span>`
+      : n.mudancas > 0
+        ? `<span style="color:var(--yellow)">🔔 ${n.mudancas} movimentação(ões) detectada(s)</span>`
+        : `<span style="color:#15803d">✅ Nenhuma novidade — ${n.total_casos || 0} casos verificados</span>`;
+
+    return `
+      <div class="notif-card ${unreadClass}" onclick="markRead('${n.id}', this)">
+        <div class="notif-card-top">
+          <div class="notif-card-time">${dateStr} · ${timeStr}</div>
+          <span class="notif-trigger-badge ${triggerClass}">${triggerLabel}</span>
+        </div>
+        <div class="notif-card-summary">${summaryText}</div>
+        ${changesHtml}
+        ${n.erros > 0 && !hasError ? `<div style="font-size:11px;color:#b45309;margin-top:6px">⚠ ${n.erros} erro(s) de raspagem</div>` : ''}
+        ${hasError ? `<div style="font-size:11px;color:#991b1b;margin-top:6px;font-family:var(--font-mono)">${n.erro_msg}</div>` : ''}
+      </div>
+    `;
+  }).join('');
+}
+
+async function markRead(id, el) {
+  if (!serverOnline) return;
+  try {
+    await fetch(`${API_BASE}/notifications/${id}/read`, { method: 'POST' });
+    el.classList.remove('unread');
+    const remaining = document.querySelectorAll('.notif-card.unread').length;
+    updateNotifBadge(remaining);
+  } catch(e) {}
+}
+
+async function markAllRead() {
+  if (!serverOnline) return;
+  try {
+    await fetch(`${API_BASE}/notifications/read-all`, { method: 'POST' });
+    document.querySelectorAll('.notif-card.unread').forEach(el => el.classList.remove('unread'));
+    updateNotifBadge(0);
+    addLog('Todas as notificações marcadas como lidas.', 'ok');
+  } catch(e) {}
+}
+
+
+// ═══════════════════════════════════════════════════════════════
+//  RUN CHECK — usa servidor local via Playwright
+// ═══════════════════════════════════════════════════════════════
+async function runCheck() {
+  const btn = document.getElementById('check-btn');
+  btn.classList.add('loading');
+  btn.disabled = true;
+  const stEl = document.getElementById('status-text');
+  if (stEl) stEl.textContent = 'Verificando...';
+
+  addLog('Iniciando verificação de movimentações...', 'info');
+  showToast('Consultando fontes oficiais...', '🔍');
+
+  if (!serverOnline) {
+    addLog('Servidor offline. Inicie o server.py para verificar.', 'warn');
+    showToast('Servidor offline — inicie o server.py.', '⚠️');
+    btn.classList.remove('loading');
+    btn.disabled = false;
+    if (stEl) stEl.textContent = 'Servidor offline';
+    return;
+  }
+
+  try {
+    const r = await fetch(`${API_BASE}/check`, { method: 'POST' });
+
+    if (r.status === 409) {
+      addLog('Verificação já em andamento — aguarde...', 'warn');
+      showToast('Verificação em andamento, aguarde.', '⏳');
+      await pollCheckCompletion();
+      btn.classList.remove('loading');
+      btn.disabled = false;
+      return;
+    }
+
+    if (r.ok) {
+      addLog('Verificação Playwright iniciada no servidor...', 'info');
+      showToast('Playwright em execução — aguarde...', '🤖');
+      await pollCheckCompletion();
+      btn.classList.remove('loading');
+      btn.disabled = false;
+      return;
+    }
+  } catch(e) {
+    addLog('⚠ Erro ao contactar servidor.', 'warn');
+  }
+
+  btn.classList.remove('loading');
+  btn.disabled = false;
+  if (stEl) stEl.textContent = 'Servidor ativo';
+}
+
+async function pollCheckCompletion() {
+  const btn = document.getElementById('check-btn');
+  let attempts = 0;
+  const MAX = 120; // até 2 min
+
+  while (attempts < MAX) {
+    await new Promise(r => setTimeout(r, 3000));
+    attempts++;
+    try {
+      const r = await fetch(`${API_BASE}/check/status`);
+      const data = await r.json();
+
+      if (!data.running) {
+        // Check concluído — carrega notificações
+        await loadNotifications();
+        await loadLiveState();
+        await loadDynamicState();
+        renderTable();
+        const notifs = notificationsData;
+        const latest = notifs[0];
+
+        if (latest && latest.mudancas > 0) {
+          addLog(`✓ ${latest.mudancas} movimentação(ões) detectada(s)!`, 'warn');
+          showToast(`${latest.mudancas} nova(s) movimentação(ões)!`, '🔔');
+          updateNotifBadge(notifs.filter(n => !n.lida).length);
+
+          showModal(`
+            <div class="modal-header">
+              <div class="modal-icon alert">🔔</div>
+              <div>
+                <div class="modal-title">Movimentações Detectadas</div>
+                <div class="modal-subtitle">${latest.mudancas} atualização(ões) • ${new Date(latest.timestamp).toLocaleDateString('pt-BR')}</div>
+              </div>
+            </div>
+            ${latest.changes.map(c => `
+              <div class="change-item">
+                <div class="change-case">${c.name}</div>
+                <div class="change-text">${c.desc_nova}</div>
+                <div class="change-date">${c.data_nova} — <span style="color:var(--text3)">Anterior: ${c.desc_anterior}</span></div>
+              </div>
+            `).join('')}
+            <div class="modal-footer">
+              <button class="btn btn-ghost" onclick="closeModal();showNotificationsPanel()">Ver Histórico</button>
+              <button class="btn btn-primary" onclick="closeModal()">✓ OK</button>
+            </div>
+          `);
+        } else {
+          addLog('✓ Verificação Playwright concluída. Sem novidades.', 'ok');
+          showToast('Playwright — nenhuma novidade detectada.', '✅');
+          showModal(`
+            <div class="modal-header">
+              <div class="modal-icon success">✅</div>
+              <div>
+                <div class="modal-title">Tudo em Ordem</div>
+                <div class="modal-subtitle">Verificação via Playwright concluída • ${new Date().toLocaleDateString('pt-BR')} às ${new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}</div>
+              </div>
+            </div>
+            <div style="font-size:14px;color:var(--text2);line-height:1.7;margin-bottom:16px">
+              Raspagem completa dos portais realizada — <strong>${latest?.total_casos || CASES.length} casos</strong> verificados.
+              ${latest?.erros > 0 ? `<br><span style="color:var(--yellow)">⚠ ${latest.erros} erro(s) de raspagem</span>` : ''}
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-ghost" onclick="closeModal();showNotificationsPanel()">Ver Histórico</button>
+              <button class="btn btn-primary" onclick="closeModal()">OK</button>
+            </div>
+          `);
+        }
+
+        state.lastCheck = data.last_run ? new Date(data.last_run).getTime() : Date.now();
+        state.nextCheck = data.next_run ? new Date(data.next_run).getTime() : Date.now() + 7*24*60*60*1000;
+        updateStats();
+        updateNextCheckDisplay();
+        btn.classList.remove('loading');
+        btn.disabled = false;
+        document.getElementById('status-text').textContent = 'Servidor ativo';
+        return;
+      }
+
+      addLog(`Playwright rodando... (${attempts * 3}s)`, 'info');
+    } catch(e) {
+      break;
+    }
+  }
+
+  // Timeout
+  addLog('⚠ Timeout na verificação.', 'warn');
+  btn.classList.remove('loading');
+  btn.disabled = false;
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  WEEKLY REPORT MODAL
+// ═══════════════════════════════════════════════════════════════
+function showWeeklyReport() {
+  const active = CASES.filter(c => c.status === 'ativo');
+  const suspended = CASES.filter(c => c.status === 'suspenso');
+  const closed = CASES.filter(c => c.status === 'encerrado');
+
+  showModal(`
+    <div class="modal-header">
+      <div class="modal-icon info">📊</div>
+      <div>
+        <div class="modal-title">Relatório Semanal</div>
+        <div class="modal-subtitle">Marco Regulatório — ${new Date().toLocaleDateString('pt-BR', {day:'2-digit',month:'long',year:'numeric'})}</div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px">
+      <div style="background:var(--green-dim);border:1px solid rgba(34,197,94,0.2);border-radius:8px;padding:12px;text-align:center">
+        <div style="font-size:28px;font-weight:800;color:var(--green);font-family:var(--font-display)">${active.length}</div>
+        <div style="font-size:11px;color:var(--text3);font-family:var(--font-mono)">ATIVOS</div>
+      </div>
+      <div style="background:var(--yellow-dim);border:1px solid rgba(245,158,11,0.2);border-radius:8px;padding:12px;text-align:center">
+        <div style="font-size:28px;font-weight:800;color:var(--yellow);font-family:var(--font-display)">${suspended.length}</div>
+        <div style="font-size:11px;color:var(--text3);font-family:var(--font-mono)">SUSPENSOS</div>
+      </div>
+      <div style="background:rgba(100,116,139,0.1);border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center">
+        <div style="font-size:28px;font-weight:800;color:var(--text3);font-family:var(--font-display)">${closed.length}</div>
+        <div style="font-size:11px;color:var(--text3);font-family:var(--font-mono)">ENCERRADOS</div>
+      </div>
+    </div>
+
+    <div style="font-family:var(--font-mono);font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px">Casos Ativos — Acompanhamento</div>
+    ${active.map(c => `
+      <div class="change-item" style="margin-bottom:8px">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px">
+          <div class="change-case">${c.name}</div>
+          <span class="badge ${c.badgeClass}" style="flex-shrink:0">${c.tribunal}</span>
+        </div>
+        <div class="change-text" style="font-size:12px;margin-top:4px">${c.ultimaDescricao}</div>
+        <div class="change-date">Última mov.: ${formatDate(c.ultimaAtualizacao)}</div>
+      </div>
+    `).join('')}
+
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal()">Fechar</button>
+      <button class="btn btn-primary" onclick="closeModal();runCheck()">🔄 Verificar Agora</button>
+    </div>
+  `);
+}
+
+
+// ═══════════════════════════════════════════════════════════════
+//  TRIBUNAL BREAKDOWN SIDEBAR
+// ═══════════════════════════════════════════════════════════════
+function renderTribBreakdown() {
+  const counts = {};
+  CASES.forEach(c => { counts[c.tribunal] = (counts[c.tribunal]||0)+1; });
+  const colorMap = {'STF':'#1d4ed8','STJ':'#0f766e','Câmara':'#b45309','TCE':'#6d28d9','Judicial':'#15803d','Outros':'#64748b'};
+  const total = CASES.length;
+  const el = document.getElementById('trib-breakdown');
+  if (!el) return;
+  el.innerHTML = Object.entries(counts).sort((a,b)=>b[1]-a[1]).map(([trib, count]) => {
+    const pct = Math.round(count/total*100);
+    const color = colorMap[trib] || '#64748b';
+    return `<div style="margin-bottom:12px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px">
+        <span style="font-size:11px;font-weight:700;letter-spacing:0.06em;color:var(--gray-600)">${trib}</span>
+        <span style="font-family:var(--font-mono);font-size:11px;color:var(--gray-400)">${count} caso${count>1?'s':''}</span>
+      </div>
+      <div style="height:4px;background:var(--gray-100);border-radius:2px;overflow:hidden">
+        <div style="height:100%;width:${pct}%;background:${color};border-radius:2px;transition:width 0.8s ease"></div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  INIT + AUTO-CHECK
+// ═══════════════════════════════════════════════════════════════
+async function init() {
+  // Populate page date
+  const pageDate = document.getElementById('page-date');
+  if (pageDate) {
+    pageDate.textContent = new Date().toLocaleDateString('pt-BR', {
+      weekday: 'long', day: '2-digit', month: 'long', year: 'numeric'
+    });
+  }
+
+ loadState();
+  await loadDynamicState();
+  renderTable();
+  renderTimeline();
+  updateStats();
+  renderLog();
+
+  // Schedule next check if none set
+  if (!state.nextCheck) {
+    state.nextCheck = Date.now() + state.checkInterval;
+    saveState();
+  }
+
+  updateNextCheckDisplay();
+
+  // Update timer every minute + keep server status fresh
+  setInterval(() => {
+    updateNextCheckDisplay();
+  }, 60000);
+
+  // Poll server status every 30s to keep badge current
+  setInterval(() => {
+    checkServerStatus();
+  }, 30000);
+
+  // Auto-check if overdue
+  if (state.nextCheck && Date.now() > state.nextCheck) {
+    setTimeout(runCheck, 2000);
+  }
+
+  // Request browser notification permission
+  if ('Notification' in window && Notification.permission === 'default') {
+    Notification.requestPermission();
+  }
+
+  renderTribBreakdown();
+  addLog('Sistema iniciado.', 'ok');
+  addLog(`${CASES.length} casos carregados.`, 'info');
+
+  // Check server connectivity e carrega estado ao vivo
+  checkServerStatus().then(online => {
+    if (online) {
+      loadLiveState();
+      addLog('Servidor local conectado.', 'ok');
+      showToast('Dashboard e servidor ativos!', '⚖️');
+    } else {
+      addLog('Servidor offline — modo standalone ativo.', 'warn');
+      showToast('Dashboard carregado (modo offline)', '⚠️');
+    }
+  });
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  NEWS PANEL
+// ═══════════════════════════════════════════════════════════════
+
+// Notícias nos cards — altere aqui para mudar a quantidade
+const NEWS_CARDS_COUNT    = 10;
+// Notícias na linha do tempo — altere aqui para mudar a quantidade
+const NEWS_TIMELINE_COUNT = 30;
+
+let newsData = [];
+
+function showNewsPanel() {
+  document.getElementById('news-panel').classList.add('open');
+  loadNews();
+}
+
+function closeNewsPanel() {
+  document.getElementById('news-panel').classList.remove('open');
+}
+
+async function loadNews() {
+  const body = document.getElementById('news-panel-body');
+  try {
+    const r = await fetch(`${API_BASE}/news?limit=${NEWS_TIMELINE_COUNT}`);
+    if (!r.ok) throw new Error('Servidor offline');
+    newsData = await r.json();
+    renderNews(newsData);
+  } catch(e) {
+    body.innerHTML = `<div class="news-empty">⚠️ Não foi possível carregar as notícias.<br><br>Execute uma verificação para buscar as notícias.</div>`;
+  }
+}
+
+function formatNewsDate(iso) {
+  if (!iso) return '—';
+  try {
+    const d = new Date(iso);
+    return d.toLocaleDateString('pt-BR', { day:'2-digit', month:'2-digit', year:'numeric' })
+      + ' ' + d.toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' });
+  } catch(e) { return iso; }
+}
+
+function renderNews(data) {
+  const body = document.getElementById('news-panel-body');
+  const upEl = document.getElementById('news-last-update');
+
+  if (!data || data.length === 0) {
+    body.innerHTML = `<div class="news-empty">📭 Nenhuma notícia encontrada.<br><br>Execute uma verificação para buscar notícias sobre precatórios.</div>`;
+    return;
+  }
+
+  if (upEl && data[0]) {
+    upEl.textContent = 'Atualizado: ' + formatNewsDate(data[0].published_iso);
+  }
+
+  const cards = data.slice(0, NEWS_CARDS_COUNT).map(n => `
+    <a class="news-card" href="${n.link}" target="_blank" rel="noopener">
+      <div class="news-card-source">${n.source}</div>
+      <div class="news-card-title">${n.title}</div>
+      <div class="news-card-date">${formatNewsDate(n.published_iso)}</div>
+    </a>
+  `).join('');
+
+  const timeline = data.slice(0, NEWS_TIMELINE_COUNT).map(n => `
+    <div class="news-tl-item">
+      <div class="news-tl-dot"></div>
+      <div class="news-tl-content">
+        <div class="news-tl-date">${formatNewsDate(n.published_iso)}</div>
+        <div class="news-tl-source">${n.source}</div>
+        <a class="news-tl-title" href="${n.link}" target="_blank" rel="noopener">${n.title}</a>
+      </div>
+    </div>
+  `).join('');
+
+  body.innerHTML = `
+    <div class="news-timeline-title" style="margin-bottom:20px">
+      Últimas ${Math.min(NEWS_CARDS_COUNT, data.length)} Notícias
+    </div>
+    <div class="news-grid">${cards}</div>
+    <div class="news-timeline-title">Linha do Tempo — ${Math.min(NEWS_TIMELINE_COUNT, data.length)} notícias</div>
+    <div>${timeline}</div>
+  `;
+}
+
+// Close modal on overlay click
+document.getElementById('modal-backdrop').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+window.addEventListener('load', init);
+
+  // ── LIVE RELOAD (desenvolvimento) ──────────────────────────
+  (function() {
+    function connect() {
+      const es = new EventSource('/api/livereload');
+      es.onmessage = function(e) {
+        if (e.data === 'reload') {
+          console.log('[live-reload] Recarregando...');
+          location.reload();
+        }
+      };
+      es.onerror = function() {
+        es.close();
+        setTimeout(connect, 3000); // reconecta se cair
+      };
+    }
+    connect();
+  })();
+
+
+</script>
+</body>
+</html>
